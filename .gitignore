@@ -1,0 +1,10 @@
+target/
+project/.bloop
+project/project
+project/target
+project/metals.sbt
+.bloop/
+.bsp/
+.metals/
+.vscode/
+camunda-h2-default/
