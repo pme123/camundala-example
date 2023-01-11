@@ -8,3 +8,4 @@ project/metals.sbt
 .metals/
 .vscode/
 camunda-h2-default/
+/.idea/

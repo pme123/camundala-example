@@ -20,7 +20,7 @@ lazy val root = (project in file("."))
     testFrameworks += new TestFramework("camundala.simulation.custom.SimulationTestFramework")
   )
 
-val camundalaVersion = "0.12.0"
+val camundalaVersion = "0.13.0"
 lazy val camundalaDependencies = Seq(
   "io.github.pme123" %% "camundala-api" % camundalaVersion,
   "io.github.pme123" %% "camundala-simulation" % camundalaVersion % IntegrationTest
