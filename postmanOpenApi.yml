@@ -8,19 +8,24 @@ info:
 
 
 
-    Created at 23/12/2022, 10:55
+    Created at 12/01/2023, 20:46
 
     **[Check Project on Cawemo](https://cawemo.com/folders/a76e4b8e-8631-4d20-a8eb-258b000ff88a--camundala)**
 
     .. in a Spring Boot Web Application for Camunda 7.
 
-    > This is the invoice demo application which is shipped with the full distributions.
-
-    See the original [README](https://github.com/camunda/camunda-bpm-platform/tree/master/examples/invoice).
+    > A standalone example to use [Camundala](https://github.com/pme123/camundala) for BPMN development.
 
     I bundled it here! Just run `InvoiceServletProcessApplication`.
 
     This based on this Project: https://github.com/pme123/spring-boot-datakurre-plugins
+
+    ## Original
+
+    > This is the invoice demo application which is shipped with the full distributions.
+
+    See the original [README](https://github.com/camunda/camunda-bpm-platform/tree/master/examples/invoice).
+
 
 
 

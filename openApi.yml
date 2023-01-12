@@ -5,19 +5,24 @@ info:
   summary: |2+
 
 
-    Created at 23/12/2022, 10:55
+    Created at 12/01/2023, 20:46
 
     **[Check Project on Cawemo](https://cawemo.com/folders/a76e4b8e-8631-4d20-a8eb-258b000ff88a--camundala)**
 
     .. in a Spring Boot Web Application for Camunda 7.
 
-    > This is the invoice demo application which is shipped with the full distributions.
-
-    See the original [README](https://github.com/camunda/camunda-bpm-platform/tree/master/examples/invoice).
+    > A standalone example to use [Camundala](https://github.com/pme123/camundala) for BPMN development.
 
     I bundled it here! Just run `InvoiceServletProcessApplication`.
 
     This based on this Project: https://github.com/pme123/spring-boot-datakurre-plugins
+
+    ## Original
+
+    > This is the invoice demo application which is shipped with the full distributions.
+
+    See the original [README](https://github.com/camunda/camunda-bpm-platform/tree/master/examples/invoice).
+
 
 
 paths:
@@ -314,6 +319,66 @@ paths:
                 Invoice NOT clarified:
                   value:
                     clarified: false
+  /decisiondmn/DMNs/invoice-assign-approver/InvoiceAssignApproverDMN:
+    head:
+      tags:
+      - DMNs
+      summary: 'DecisionDmn: invoice-assign-approver'
+      description: |2
+
+        Decision Table on who must approve the Invoice.
+
+        <iframe src="https://cawemo.com/embed/155ba236-d5d1-42f7-8b56-3e90e0bb98d4" style="width:100%;height:500px;border:1px solid #ccc" allowfullscreen></iframe>
+
+
+
+        <details>
+        <summary><b>Used in 3 Project(s) (EXPERIMENTAL)</b></summary>
+        <p>
+
+
+        - _camundala_
+           - [InvoiceReceiptP](No URL defined for camundala/OpenApi.html#operation/Process:%20InvoiceReceiptP)
+           - [invoice](No URL defined for camundala/OpenApi.html#operation/Process:%20invoice)
+
+
+        - _camundala-dsl_
+           - [InvoiceReceiptP](No URL defined for camundala-dsl/OpenApi.html#operation/Process:%20InvoiceReceiptP)
+           - [invoice](No URL defined for camundala-dsl/OpenApi.html#operation/Process:%20invoice)
+
+
+        - _camundala-example_
+           - [InvoiceReceiptP](No URL defined for camundala-example/OpenApi.html#operation/Process:%20InvoiceReceiptP)
+           - [invoice](No URL defined for camundala-example/OpenApi.html#operation/Process:%20invoice)
+
+
+
+
+        </p>
+        </details>
+      operationId: 'DecisionDmn: invoice-assign-approver'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectApproverGroup'
+            examples:
+              InvoiceAssignApproverDMN:
+                value:
+                  amount: 30.0
+                  invoiceCategory: Software License Costs
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectEntries_camundala.examples.invoice.domain.ApproverGroup[]'
+              examples:
+                InvoiceAssignApproverDMN:
+                  value:
+                  - management
 components:
   schemas:
     ApproveInvoice:
