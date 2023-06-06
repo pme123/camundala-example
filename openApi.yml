@@ -5,9 +5,9 @@ info:
   summary: |2+
 
 
-    Created at 12/01/2023, 20:46
+    Created at 06/06/2023, 17:32
 
-    **[Check Project on Cawemo](https://cawemo.com/folders/a76e4b8e-8631-4d20-a8eb-258b000ff88a--camundala)**
+    ****
 
     .. in a Spring Boot Web Application for Camunda 7.
 
@@ -26,31 +26,35 @@ info:
 
 
 paths:
-  /process/InvoiceReceipt/InvoiceReceiptP/InvoiceReceipt:
+  /process/InvoiceReceiptP:
     head:
       tags:
-      - Invoice Receipt
+      - InvoiceReceiptP
       summary: 'Process: InvoiceReceiptP'
-      description: "\nThis starts the Invoice Receipt Process.\n\n<iframe src=\"https://cawemo.com/embed/e289c19a-8a57-4467-8583-de72a5e57488\"\
-        \ style=\"width:100%;height:500px;border:1px solid #ccc\" allowfullscreen></iframe>\n\
-        \n\n\n**Used in no other Process.**\n\n<details>\n<summary><b>Uses 1 Project(s)\
-        \ (EXPERIMENTAL)</b></summary>\n<p>\n\n\n- _invoice-example_\n   - _[ReviewInvoiceP](No\
-        \ URL defined for invoice-example/OpenApi.html#operation/Process:%20ReviewInvoiceP)_\
-        \ \n   - _[invoice-assign-approver](No URL defined for invoice-example/OpenApi.html#operation/DecisionDmn:%20invoice-assign-approver)_\
-        \ (DMN)\n\n\n\n</p>\n</details>\n"
+      description: |+
+        This starts the Invoice Receipt Process.
+
+
+        <div class="diagramCanvas">
+          <div class="diagram" id="InvoiceReceiptP-63530">
+            <img onLoad="openFromUrl('InvoiceReceiptP.bpmn', new BpmnJS({ container: $('#InvoiceReceiptP-63530'), height: '95%', width: '95%' }));" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" />
+          </div>
+        </div>
+
+        Download: [InvoiceReceiptP.bpmn](src/main/resources/InvoiceReceiptP.bpmn)
+
       operationId: 'Process: InvoiceReceiptP'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InvoiceReceipt'
+              $ref: '#/components/schemas/In'
             examples:
-              Invoice Receipt:
+              InvoiceReceiptP:
                 value:
                   creditor: Great Pizza for Everyone Inc.
                   amount: 300.0
                   invoiceCategory: Travel Expenses
-                  invoiceNumber: I-12345
         required: true
       responses:
         '200':
@@ -58,59 +62,51 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InvoiceReceiptCheck'
+                $ref: '#/components/schemas/Out1'
               examples:
-                Invoice Receipt:
+                InvoiceReceiptP:
                   value:
                     approved: true
-  /decisiondmn/InvoiceReceipt/invoice-assign-approver/InvoiceAssignApproverDMN:
+  /decisiondmn/InvoiceReceiptP/invoice-assign-approver:
     head:
       tags:
-      - Invoice Receipt
+      - InvoiceReceiptP
       summary: 'DecisionDmn: invoice-assign-approver'
-      description: |2
-
+      description: |+
         Decision Table on who must approve the Invoice.
 
-        <iframe src="https://cawemo.com/embed/155ba236-d5d1-42f7-8b56-3e90e0bb98d4" style="width:100%;height:500px;border:1px solid #ccc" allowfullscreen></iframe>
 
+        <div class="diagramCanvas">
+          <div class="diagram" id="invoice-assign-approver-64390">
+            <img onLoad="openFromUrl('invoice-assign-approver.dmn', new DmnJS({ container: $('#invoice-assign-approver-64390'), height: '95%', width: '95%' }));" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" />
+          </div>
+        </div>
 
+        Download: [invoice-assign-approver.dmn](src/main/resources/invoice-assign-approver.dmn)
 
-        <details>
-        <summary><b>Used in 3 Project(s) (EXPERIMENTAL)</b></summary>
-        <p>
-
-
-        - _camundala_
-           - [InvoiceReceiptP](No URL defined for camundala/OpenApi.html#operation/Process:%20InvoiceReceiptP)
-           - [invoice](No URL defined for camundala/OpenApi.html#operation/Process:%20invoice)
-
-
-        - _camundala-dsl_
-           - [InvoiceReceiptP](No URL defined for camundala-dsl/OpenApi.html#operation/Process:%20InvoiceReceiptP)
-           - [invoice](No URL defined for camundala-dsl/OpenApi.html#operation/Process:%20invoice)
-
-
-        - _camundala-example_
-           - [InvoiceReceiptP](No URL defined for camundala-example/OpenApi.html#operation/Process:%20InvoiceReceiptP)
-           - [invoice](No URL defined for camundala-example/OpenApi.html#operation/Process:%20invoice)
-
-
-
-
-        </p>
-        </details>
       operationId: 'DecisionDmn: invoice-assign-approver'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SelectApproverGroup'
+              $ref: '#/components/schemas/In1'
             examples:
-              InvoiceAssignApproverDMN:
+              invoice-assign-approver:
                 value:
                   amount: 30.0
                   invoiceCategory: Software License Costs
+              budget:
+                value:
+                  amount: 30.0
+                  invoiceCategory: Software License Costs
+              day-to-day expense:
+                value:
+                  amount: 125.0
+                  invoiceCategory: Misc
+              exceptional:
+                value:
+                  amount: 12345.0
+                  invoiceCategory: Misc
         required: true
       responses:
         '200':
@@ -118,15 +114,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CollectEntries_camundala.examples.invoice.domain.ApproverGroup[]'
+                $ref: '#/components/schemas/CollectEntries_camundala.examples.invoice.InvoiceReceipt.ApproverGroup[]'
               examples:
-                InvoiceAssignApproverDMN:
+                invoice-assign-approver:
                   value:
                   - management
-  /usertask/InvoiceReceipt/ApproveInvoiceUT:
+  /usertask/InvoiceReceiptP/ApproveInvoiceUT:
     head:
       tags:
-      - Invoice Receipt
+      - InvoiceReceiptP
       summary: 'UserTask: ApproveInvoiceUT'
       description: Approve the invoice (or not).
       operationId: 'UserTask: ApproveInvoiceUT'
@@ -134,14 +130,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InvoiceReceipt'
+              $ref: '#/components/schemas/In2'
             examples:
               ApproveInvoiceUT:
                 value:
-                  creditor: Great Pizza for Everyone Inc.
-                  amount: 300.0
-                  invoiceCategory: Travel Expenses
-                  invoiceNumber: I-12345
+                  approved: true
         required: true
       responses:
         '200':
@@ -149,7 +142,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApproveInvoice'
+                $ref: '#/components/schemas/Out2'
               examples:
                 ApproveInvoiceUT:
                   value:
@@ -160,10 +153,10 @@ paths:
                 Invoice NOT approved:
                   value:
                     approved: false
-  /usertask/InvoiceReceipt/PrepareBankTransferUT:
+  /usertask/InvoiceReceiptP/PrepareBankTransferUT:
     head:
       tags:
-      - Invoice Receipt
+      - InvoiceReceiptP
       summary: 'UserTask: PrepareBankTransferUT'
       description: Prepare the bank transfer in the Financial Accounting System.
       operationId: 'UserTask: PrepareBankTransferUT'
@@ -171,7 +164,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InvoiceReceipt'
+              $ref: '#/components/schemas/In3'
             examples:
               PrepareBankTransferUT:
                 value:
@@ -183,57 +176,31 @@ paths:
       responses:
         '200':
           description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PrepareBankTransfer'
-              examples:
-                PrepareBankTransferUT:
-                  value: {}
-  /process/ReviewInvoice/ReviewInvoiceP/ReviewInvoice:
+  /process/ReviewInvoiceP:
     head:
       tags:
-      - Review Invoice
+      - ReviewInvoiceP
       summary: 'Process: ReviewInvoiceP'
-      description: |2
-
+      description: |+
         This starts the Review Invoice Process.
 
-        <iframe src="https://cawemo.com/embed/cc9f978a-e98a-4b01-991d-36d682574cda" style="width:100%;height:500px;border:1px solid #ccc" allowfullscreen></iframe>
 
+        <div class="diagramCanvas">
+          <div class="diagram" id="ReviewInvoiceP-6340">
+            <img onLoad="openFromUrl('ReviewInvoiceP.bpmn', new BpmnJS({ container: $('#ReviewInvoiceP-6340'), height: '95%', width: '95%' }));" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" />
+          </div>
+        </div>
 
+        Download: [ReviewInvoiceP.bpmn](src/main/resources/ReviewInvoiceP.bpmn)
 
-        <details>
-        <summary><b>Used in 3 Project(s) (EXPERIMENTAL)</b></summary>
-        <p>
-
-
-        - _camundala_
-           - [InvoiceReceiptP](No URL defined for camundala/OpenApi.html#operation/Process:%20InvoiceReceiptP)
-
-
-        - _camundala-dsl_
-           - [InvoiceReceiptP](No URL defined for camundala-dsl/OpenApi.html#operation/Process:%20InvoiceReceiptP)
-
-
-        - _camundala-example_
-           - [InvoiceReceiptP](No URL defined for camundala-example/OpenApi.html#operation/Process:%20InvoiceReceiptP)
-
-
-
-
-        </p>
-        </details>
-
-        **Uses no other Processes.**
       operationId: 'Process: ReviewInvoiceP'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InvoiceReceipt'
+              $ref: '#/components/schemas/In4'
             examples:
-              Review Invoice:
+              ReviewInvoiceP:
                 value:
                   creditor: Great Pizza for Everyone Inc.
                   amount: 300.0
@@ -246,15 +213,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InvoiceReviewed'
+                $ref: '#/components/schemas/Out'
               examples:
-                Review Invoice:
+                ReviewInvoiceP:
                   value:
                     clarified: true
-  /usertask/ReviewInvoice/AssignReviewerUT:
+  /usertask/ReviewInvoiceP/AssignReviewerUT:
     head:
       tags:
-      - Review Invoice
+      - ReviewInvoiceP
       summary: 'UserTask: AssignReviewerUT'
       description: Select the Reviewer.
       operationId: 'UserTask: AssignReviewerUT'
@@ -262,7 +229,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InvoiceReceipt'
+              $ref: '#/components/schemas/In3'
             examples:
               AssignReviewerUT:
                 value:
@@ -277,15 +244,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssignedReviewer'
+                $ref: '#/components/schemas/Out3'
               examples:
                 AssignReviewerUT:
                   value:
                     reviewer: John
-  /usertask/ReviewInvoice/ReviewInvoiceUT:
+  /usertask/ReviewInvoiceP/ReviewInvoiceUT:
     head:
       tags:
-      - Review Invoice
+      - ReviewInvoiceP
       summary: 'UserTask: ReviewInvoiceUT'
       description: Review Invoice and approve.
       operationId: 'UserTask: ReviewInvoiceUT'
@@ -293,7 +260,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InvoiceReceipt'
+              $ref: '#/components/schemas/In3'
             examples:
               ReviewInvoiceUT:
                 value:
@@ -308,7 +275,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InvoiceReviewed'
+                $ref: '#/components/schemas/Out4'
               examples:
                 ReviewInvoiceUT:
                   value:
@@ -319,51 +286,156 @@ paths:
                 Invoice NOT clarified:
                   value:
                     clarified: false
-  /decisiondmn/DMNs/invoice-assign-approver/InvoiceAssignApproverDMN:
+  /usertask/UserTasks/ApproveInvoiceUT:
+    head:
+      tags:
+      - User Tasks
+      summary: 'UserTask: ApproveInvoiceUT'
+      description: Approve the invoice (or not).
+      operationId: 'UserTask: ApproveInvoiceUT'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/In2'
+            examples:
+              ApproveInvoiceUT:
+                value:
+                  approved: true
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Out2'
+              examples:
+                ApproveInvoiceUT:
+                  value:
+                    approved: true
+                Invoice approved:
+                  value:
+                    approved: true
+                Invoice NOT approved:
+                  value:
+                    approved: false
+  /usertask/UserTasks/PrepareBankTransferUT:
+    head:
+      tags:
+      - User Tasks
+      summary: 'UserTask: PrepareBankTransferUT'
+      description: Prepare the bank transfer in the Financial Accounting System.
+      operationId: 'UserTask: PrepareBankTransferUT'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/In3'
+            examples:
+              PrepareBankTransferUT:
+                value:
+                  creditor: Great Pizza for Everyone Inc.
+                  amount: 300.0
+                  invoiceCategory: Travel Expenses
+                  invoiceNumber: I-12345
+        required: true
+      responses:
+        '200':
+          description: ''
+  /usertask/UserTasks/AssignReviewerUT:
+    head:
+      tags:
+      - User Tasks
+      summary: 'UserTask: AssignReviewerUT'
+      description: Select the Reviewer.
+      operationId: 'UserTask: AssignReviewerUT'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/In3'
+            examples:
+              AssignReviewerUT:
+                value:
+                  creditor: Great Pizza for Everyone Inc.
+                  amount: 300.0
+                  invoiceCategory: Travel Expenses
+                  invoiceNumber: I-12345
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Out3'
+              examples:
+                AssignReviewerUT:
+                  value:
+                    reviewer: John
+  /usertask/UserTasks/ReviewInvoiceUT:
+    head:
+      tags:
+      - User Tasks
+      summary: 'UserTask: ReviewInvoiceUT'
+      description: Review Invoice and approve.
+      operationId: 'UserTask: ReviewInvoiceUT'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/In3'
+            examples:
+              ReviewInvoiceUT:
+                value:
+                  creditor: Great Pizza for Everyone Inc.
+                  amount: 300.0
+                  invoiceCategory: Travel Expenses
+                  invoiceNumber: I-12345
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Out4'
+              examples:
+                ReviewInvoiceUT:
+                  value:
+                    clarified: true
+                Invoice clarified:
+                  value:
+                    clarified: true
+                Invoice NOT clarified:
+                  value:
+                    clarified: false
+  /decisiondmn/DMNs/invoice-assign-approver:
     head:
       tags:
       - DMNs
       summary: 'DecisionDmn: invoice-assign-approver'
-      description: |2
-
+      description: |+
         Decision Table on who must approve the Invoice.
 
-        <iframe src="https://cawemo.com/embed/155ba236-d5d1-42f7-8b56-3e90e0bb98d4" style="width:100%;height:500px;border:1px solid #ccc" allowfullscreen></iframe>
 
+        <div class="diagramCanvas">
+          <div class="diagram" id="invoice-assign-approver-79387">
+            <img onLoad="openFromUrl('invoice-assign-approver.dmn', new DmnJS({ container: $('#invoice-assign-approver-79387'), height: '95%', width: '95%' }));" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" />
+          </div>
+        </div>
 
+        Download: [invoice-assign-approver.dmn](src/main/resources/invoice-assign-approver.dmn)
 
-        <details>
-        <summary><b>Used in 3 Project(s) (EXPERIMENTAL)</b></summary>
-        <p>
-
-
-        - _camundala_
-           - [InvoiceReceiptP](No URL defined for camundala/OpenApi.html#operation/Process:%20InvoiceReceiptP)
-           - [invoice](No URL defined for camundala/OpenApi.html#operation/Process:%20invoice)
-
-
-        - _camundala-dsl_
-           - [InvoiceReceiptP](No URL defined for camundala-dsl/OpenApi.html#operation/Process:%20InvoiceReceiptP)
-           - [invoice](No URL defined for camundala-dsl/OpenApi.html#operation/Process:%20invoice)
-
-
-        - _camundala-example_
-           - [InvoiceReceiptP](No URL defined for camundala-example/OpenApi.html#operation/Process:%20InvoiceReceiptP)
-           - [invoice](No URL defined for camundala-example/OpenApi.html#operation/Process:%20invoice)
-
-
-
-
-        </p>
-        </details>
       operationId: 'DecisionDmn: invoice-assign-approver'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SelectApproverGroup'
+              $ref: '#/components/schemas/In1'
             examples:
-              InvoiceAssignApproverDMN:
+              invoice-assign-approver:
                 value:
                   amount: 30.0
                   invoiceCategory: Software License Costs
@@ -374,14 +446,59 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CollectEntries_camundala.examples.invoice.domain.ApproverGroup[]'
+                $ref: '#/components/schemas/CollectEntries_camundala.examples.invoice.InvoiceReceipt.ApproverGroup[]'
               examples:
-                InvoiceAssignApproverDMN:
+                invoice-assign-approver:
                   value:
                   - management
+                budget:
+                  value:
+                  - management
+                day-to-day expense:
+                  value:
+                  - accounting
+                  - sales
 components:
   schemas:
-    ApproveInvoice:
+    ApproverGroup:
+      oneOf:
+      - $ref: '#/components/schemas/accounting'
+      - $ref: '#/components/schemas/management'
+      - $ref: '#/components/schemas/sales'
+    CollectEntries_camundala.examples.invoice.InvoiceReceipt.ApproverGroup[]:
+      oneOf:
+      - $ref: '#/components/schemas/ApproverGroup'
+    In:
+      required:
+      - creditor
+      - amount
+      - invoiceCategory
+      type: object
+      properties:
+        creditor:
+          type: string
+        amount:
+          type: number
+          format: double
+        invoiceCategory:
+          $ref: '#/components/schemas/InvoiceCategory'
+        shouldFail:
+          type: boolean
+          description: You can let the Archive Service fail for testing.
+        invoiceReviewedMock:
+          $ref: '#/components/schemas/Out'
+    In1:
+      required:
+      - amount
+      - invoiceCategory
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+        invoiceCategory:
+          $ref: '#/components/schemas/InvoiceCategory'
+    In2:
       required:
       - approved
       type: object
@@ -390,27 +507,7 @@ components:
           type: boolean
           description: If true, the Boss accepted the Invoice
       description: Every Invoice has to be accepted by the Boss.
-    ApproverGroup:
-      oneOf:
-      - $ref: '#/components/schemas/accounting'
-      - $ref: '#/components/schemas/management'
-      - $ref: '#/components/schemas/sales'
-    AssignedReviewer:
-      required:
-      - reviewer
-      type: object
-      properties:
-        reviewer:
-          type: string
-    CollectEntries_camundala.examples.invoice.domain.ApproverGroup[]:
-      oneOf:
-      - $ref: '#/components/schemas/ApproverGroup'
-    InvoiceCategory:
-      oneOf:
-      - $ref: '#/components/schemas/Misc'
-      - $ref: '#/components/schemas/Software License Costs'
-      - $ref: '#/components/schemas/Travel Expenses'
-    InvoiceReceipt:
+    In3:
       required:
       - creditor
       - amount
@@ -430,7 +527,48 @@ components:
         shouldFail:
           type: boolean
           description: You can let the Archive Service fail for testing.
-    InvoiceReceiptCheck:
+      description: Same Input as _InvoiceReceipt_, only without mocking - no mocking
+        in UserTasks
+    In4:
+      required:
+      - creditor
+      - amount
+      - invoiceCategory
+      - invoiceNumber
+      type: object
+      properties:
+        creditor:
+          type: string
+        amount:
+          type: number
+          format: double
+        invoiceCategory:
+          $ref: '#/components/schemas/InvoiceCategory'
+        invoiceNumber:
+          type: string
+        shouldFail:
+          type: boolean
+          description: You can let the Archive Service fail for testing.
+        outputMock:
+          $ref: '#/components/schemas/Out'
+      description: Same Input as _InvoiceReceipt_, only different Mocking
+    InvoiceCategory:
+      oneOf:
+      - $ref: '#/components/schemas/Misc'
+      - $ref: '#/components/schemas/Software License Costs'
+      - $ref: '#/components/schemas/Travel Expenses'
+    Misc:
+      type: object
+    Out:
+      required:
+      - clarified
+      type: object
+      properties:
+        clarified:
+          type: boolean
+          description: Flag that is set by the Reviewer
+      description: Mocking the subProcess _Invoice Receipt_.
+    Out1:
       required:
       - approved
       type: object
@@ -441,7 +579,23 @@ components:
         clarified:
           type: boolean
           description: Flag that is set by the Reviewer (only set if there was a review).
-    InvoiceReviewed:
+    Out2:
+      required:
+      - approved
+      type: object
+      properties:
+        approved:
+          type: boolean
+          description: If true, the Boss accepted the Invoice
+      description: Every Invoice has to be accepted by the Boss.
+    Out3:
+      required:
+      - reviewer
+      type: object
+      properties:
+        reviewer:
+          type: string
+    Out4:
       required:
       - clarified
       type: object
@@ -449,36 +603,13 @@ components:
         clarified:
           type: boolean
           description: Flag that is set by the Reviewer
-    Misc:
-      type: object
-      description: There are three possible Categories
-    PrepareBankTransfer:
-      type: object
-      description: Prepares the bank transfer for the invoice. Only readOnly fields
-        from the Process.
-    SelectApproverGroup:
-      required:
-      - amount
-      - invoiceCategory
-      type: object
-      properties:
-        amount:
-          type: number
-          format: double
-        invoiceCategory:
-          $ref: '#/components/schemas/InvoiceCategory'
     Software License Costs:
       type: object
-      description: There are three possible Categories
     Travel Expenses:
       type: object
-      description: There are three possible Categories
     accounting:
       type: object
-      description: These Groups can approve the invoice.
     management:
       type: object
-      description: These Groups can approve the invoice.
     sales:
       type: object
-      description: These Groups can approve the invoice.

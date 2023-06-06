@@ -8,9 +8,9 @@ info:
 
 
 
-    Created at 12/01/2023, 20:46
+    Created at 06/06/2023, 17:32
 
-    **[Check Project on Cawemo](https://cawemo.com/folders/a76e4b8e-8631-4d20-a8eb-258b000ff88a--camundala)**
+    ****
 
     .. in a Spring Boot Web Application for Camunda 7.
 
@@ -36,16 +36,12 @@ paths:
   /process-definition/key/InvoiceReceiptP/start:
     post:
       tags:
-      - Invoice Receipt
-      summary: 'Invoice Receipt: StartProcess'
-      description: |2
-
+      - InvoiceReceiptP
+      summary: 'InvoiceReceiptP: StartProcess'
+      description: |
         This starts the Invoice Receipt Process.
 
-        <iframe src="https://cawemo.com/embed/e289c19a-8a57-4467-8583-de72a5e57488" style="width:100%;height:500px;border:1px solid #ccc" allowfullscreen></iframe>
-
-
-        See API Doc: [Invoice Receipt](No URL defined for invoice-example/OpenApi.html#operation/Process:%20InvoiceReceiptP)
+        See API Doc: [InvoiceReceiptP](No URL defined for invoice-example/OpenApi.html#operation/Process:%20InvoiceReceiptP)
       operationId: postProcess-definitionKeyInvoicereceiptpStart
       requestBody:
         content:
@@ -53,7 +49,7 @@ paths:
             schema:
               $ref: '#/components/schemas/StartProcessIn'
             examples:
-              Invoice Receipt:
+              InvoiceReceiptP:
                 value:
                   variables:
                     creditor:
@@ -65,10 +61,7 @@ paths:
                     invoiceCategory:
                       value: Travel Expenses
                       type: String
-                    invoiceNumber:
-                      value: I-12345
-                      type: String
-                  businessKey: Invoice Receipt
+                  businessKey: InvoiceReceiptP
                   withVariablesInReturn: true
         required: true
       responses:
@@ -77,21 +70,17 @@ paths:
   /decision-definition/key/{key}/--REMOVE:invoice-assign-approver--/evaluate:
     post:
       tags:
-      - Invoice Receipt
-      summary: 'InvoiceAssignApproverDMN: EvaluateDecision'
+      - InvoiceReceiptP
+      summary: 'invoice-assign-approver: EvaluateDecision'
       description: |2
 
-
         Decision Table on who must approve the Invoice.
-
-        <iframe src="https://cawemo.com/embed/155ba236-d5d1-42f7-8b56-3e90e0bb98d4" style="width:100%;height:500px;border:1px solid #ccc" allowfullscreen></iframe>
-
 
         Decision DMN:
         - _decisionDefinitionKey_: `invoice-assign-approver`,
 
 
-        See API Doc: [InvoiceAssignApproverDMN](No URL defined for invoice-example/OpenApi.html#operation/DecisionDmn:%20invoice-assign-approver)
+        See API Doc: [invoice-assign-approver](No URL defined for invoice-example/OpenApi.html#operation/DecisionDmn:%20invoice-assign-approver)
       operationId: postDecision-definitionKeyKey--remove:invoice-assign-approver--Evaluate
       parameters:
       - name: key
@@ -107,7 +96,7 @@ paths:
             schema:
               $ref: '#/components/schemas/EvaluateDecisionIn'
             examples:
-              InvoiceAssignApproverDMN:
+              invoice-assign-approver:
                 value:
                   variables:
                     amount:
@@ -123,7 +112,7 @@ paths:
   /task/--REMOVE:ApproveInvoiceUT--:
     post:
       tags:
-      - Invoice Receipt
+      - InvoiceReceiptP
       summary: 'ApproveInvoiceUT: GetActiveTask'
       description: |
         Approve the invoice (or not).
@@ -147,7 +136,7 @@ paths:
   /task/{taskId}/form-variables/--REMOVE:ApproveInvoiceUT--:
     get:
       tags:
-      - Invoice Receipt
+      - InvoiceReceiptP
       summary: 'ApproveInvoiceUT: GetTaskFormVariables'
       description: |
         Approve the invoice (or not).
@@ -192,7 +181,7 @@ paths:
   /task/{taskId}/complete/--REMOVE:ApproveInvoiceUT--:
     post:
       tags:
-      - Invoice Receipt
+      - InvoiceReceiptP
       summary: 'ApproveInvoiceUT: CompleteTask'
       description: |
         Approve the invoice (or not).
@@ -249,7 +238,7 @@ paths:
   /task/--REMOVE:PrepareBankTransferUT--:
     post:
       tags:
-      - Invoice Receipt
+      - InvoiceReceiptP
       summary: 'PrepareBankTransferUT: GetActiveTask'
       description: |
         Prepare the bank transfer in the Financial Accounting System.
@@ -273,7 +262,7 @@ paths:
   /task/{taskId}/form-variables/--REMOVE:PrepareBankTransferUT--:
     get:
       tags:
-      - Invoice Receipt
+      - InvoiceReceiptP
       summary: 'PrepareBankTransferUT: GetTaskFormVariables'
       description: |
         Prepare the bank transfer in the Financial Accounting System.
@@ -318,7 +307,7 @@ paths:
   /task/{taskId}/complete/--REMOVE:PrepareBankTransferUT--:
     post:
       tags:
-      - Invoice Receipt
+      - InvoiceReceiptP
       summary: 'PrepareBankTransferUT: CompleteTask'
       description: |
         Prepare the bank transfer in the Financial Accounting System.
@@ -358,16 +347,12 @@ paths:
   /process-definition/key/ReviewInvoiceP/start:
     post:
       tags:
-      - Review Invoice
-      summary: 'Review Invoice: StartProcess'
-      description: |2
-
+      - ReviewInvoiceP
+      summary: 'ReviewInvoiceP: StartProcess'
+      description: |
         This starts the Review Invoice Process.
 
-        <iframe src="https://cawemo.com/embed/cc9f978a-e98a-4b01-991d-36d682574cda" style="width:100%;height:500px;border:1px solid #ccc" allowfullscreen></iframe>
-
-
-        See API Doc: [Review Invoice](No URL defined for invoice-example/OpenApi.html#operation/Process:%20ReviewInvoiceP)
+        See API Doc: [ReviewInvoiceP](No URL defined for invoice-example/OpenApi.html#operation/Process:%20ReviewInvoiceP)
       operationId: postProcess-definitionKeyReviewinvoicepStart
       requestBody:
         content:
@@ -375,11 +360,14 @@ paths:
             schema:
               $ref: '#/components/schemas/StartProcessIn'
             examples:
-              Review Invoice:
+              ReviewInvoiceP:
                 value:
                   variables:
                     creditor:
                       value: Great Pizza for Everyone Inc.
+                      type: String
+                    invoiceNumber:
+                      value: I-12345
                       type: String
                     amount:
                       value: 300.0
@@ -387,10 +375,7 @@ paths:
                     invoiceCategory:
                       value: Travel Expenses
                       type: String
-                    invoiceNumber:
-                      value: I-12345
-                      type: String
-                  businessKey: Review Invoice
+                  businessKey: ReviewInvoiceP
                   withVariablesInReturn: true
         required: true
       responses:
@@ -399,7 +384,7 @@ paths:
   /task/--REMOVE:AssignReviewerUT--:
     post:
       tags:
-      - Review Invoice
+      - ReviewInvoiceP
       summary: 'AssignReviewerUT: GetActiveTask'
       description: |
         Select the Reviewer.
@@ -423,7 +408,7 @@ paths:
   /task/{taskId}/form-variables/--REMOVE:AssignReviewerUT--:
     get:
       tags:
-      - Review Invoice
+      - ReviewInvoiceP
       summary: 'AssignReviewerUT: GetTaskFormVariables'
       description: |
         Select the Reviewer.
@@ -468,7 +453,7 @@ paths:
   /task/{taskId}/complete/--REMOVE:AssignReviewerUT--:
     post:
       tags:
-      - Review Invoice
+      - ReviewInvoiceP
       summary: 'AssignReviewerUT: CompleteTask'
       description: |
         Select the Reviewer.
@@ -511,7 +496,7 @@ paths:
   /task/--REMOVE:ReviewInvoiceUT--:
     post:
       tags:
-      - Review Invoice
+      - ReviewInvoiceP
       summary: 'ReviewInvoiceUT: GetActiveTask'
       description: |
         Review Invoice and approve.
@@ -535,7 +520,7 @@ paths:
   /task/{taskId}/form-variables/--REMOVE:ReviewInvoiceUT--:
     get:
       tags:
-      - Review Invoice
+      - ReviewInvoiceP
       summary: 'ReviewInvoiceUT: GetTaskFormVariables'
       description: |
         Review Invoice and approve.
@@ -580,7 +565,7 @@ paths:
   /task/{taskId}/complete/--REMOVE:ReviewInvoiceUT--:
     post:
       tags:
-      - Review Invoice
+      - ReviewInvoiceP
       summary: 'ReviewInvoiceUT: CompleteTask'
       description: |
         Review Invoice and approve.
@@ -777,7 +762,7 @@ components:
         active:
           type: boolean
           description: We are only interested in the active Task(s)
-      description: A JSON object with the following properties
+      description: Same as GetActiveJobIn.
     Map_CamundaVariable:
       type: object
       additionalProperties:
