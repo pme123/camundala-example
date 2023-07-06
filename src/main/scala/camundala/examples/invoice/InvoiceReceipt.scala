@@ -2,18 +2,19 @@ package camundala.examples.invoice
 
 import camundala.bpmn.*
 import camundala.domain.*
+import camundala.examples.invoice.ReviewInvoice.Out
 
 import scala.collection.immutable.Seq
 
 object InvoiceReceipt extends BpmnDsl:
 
-  val processName = "InvoiceReceiptP"
+  val processName = "example-invoice-c7"
 
   case class In(
       creditor: String = "Great Pizza for Everyone Inc.",
       amount: Double = 300.0,
       invoiceCategory: InvoiceCategory = InvoiceCategory.`Travel Expenses`,
-      //  invoiceNumber: String = "I-12345",
+      invoiceNumber: String = "I-12345",
       // removed due to problems with sttp client
       /*   invoiceDocument: FileInOut = FileInOut(
                                                        "invoice.pdf",
@@ -24,7 +25,7 @@ object InvoiceReceipt extends BpmnDsl:
                                                      )*/
       @description("You can let the Archive Service fail for testing.")
       shouldFail: Option[Boolean] = None,
-      @description("Mocking the subProcess _Invoice Receipt_.")
+      @description(outputMockDescr(ReviewInvoice.Out()))
       invoiceReviewedMock: Option[ReviewInvoice.Out] = None
   )
   object In:
@@ -50,8 +51,7 @@ object InvoiceReceipt extends BpmnDsl:
       id = processName,
       descr = //cawemoDescr(
         "This starts the Invoice Receipt Process.",
-      //    "e289c19a-8a57-4467-8583-de72a5e57488"
-      //  ),
+      // "e289c19a-8a57-4467-8583-de72a5e57488"      ),
       in = In(),
       out = Out() // just for testing
     )
@@ -71,26 +71,17 @@ object InvoiceReceipt extends BpmnDsl:
 
     lazy val example: DecisionDmn[In, CollectEntries[ApproverGroup]] =
       collectEntries(
-        decisionDefinitionKey = "invoice-assign-approver",
+        decisionDefinitionKey = "example-invoice-c7-assignApprover",
         in = In(),
         out = Seq(ApproverGroup.management),
         descr = //cawemoDescr(
           "Decision Table on who must approve the Invoice.",
-        // "155ba236-d5d1-42f7-8b56-3e90e0bb98d4"
-        //)
+        // "155ba236-d5d1-42f7-8b56-3e90e0bb98d4" )
       )
   end InvoiceAssignApproverDMN
 
   object ApproveInvoiceUT:
-    @description("""Every Invoice has to be accepted by the Boss.""")
-    case class In(
-        @description("If true, the Boss accepted the Invoice")
-        approved: Boolean = true
-    )
-    object In:
-      given Schema[In] = Schema.derived
-      given CirceCodec[In] = deriveCodec
-    end In
+    type In = InvoiceReceipt.PrepareBankTransferUT.In
 
     @description("""Every Invoice has to be accepted by the Boss.""")
     case class Out(
@@ -106,7 +97,7 @@ object InvoiceReceipt extends BpmnDsl:
       userTask(
         id = "ApproveInvoiceUT",
         descr = "Approve the invoice (or not).",
-        in = In(),
+        in = InvoiceReceipt.PrepareBankTransferUT.In(),
         out = Out()
       )
   end ApproveInvoiceUT
@@ -120,8 +111,6 @@ object InvoiceReceipt extends BpmnDsl:
         amount: Double = 300.0,
         invoiceCategory: InvoiceCategory = InvoiceCategory.`Travel Expenses`,
         invoiceNumber: String = "I-12345",
-        @description("You can let the Archive Service fail for testing.")
-        shouldFail: Option[Boolean] = None
     )
     object In:
       given Schema[In] = Schema.derived

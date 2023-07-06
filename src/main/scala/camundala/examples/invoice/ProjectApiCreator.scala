@@ -9,7 +9,7 @@ import camundala.examples.invoice.InvoiceReceipt.InvoiceAssignApproverDMN.*
 import camundala.examples.invoice.InvoiceReceipt.{ApproverGroup, InvoiceAssignApproverDMN, InvoiceCategory, PrepareBankTransferUT}
 
 // define an object that extends from a common Api Creator
-object ApiCreator extends DefaultApiCreator:
+object ProjectApiCreator extends DefaultApiCreator:
   // technical name of the project
   val projectName = "invoice-example"
   // readable name of the project
@@ -19,8 +19,9 @@ object ApiCreator extends DefaultApiCreator:
 
   override protected val apiConfig: ApiConfig =
     super.apiConfig
+      .withBasePath(pwd / "examples" / "invoice" / "camunda7")
       .withPort(8034)
-      .withDiagramDownloadPath("src/main/resources")
+      .withDiagramDownloadPath("diagrams")
 //  .withCawemoFolder("a76e4b8e-8631-4d20-a8eb-258b000ff88a--camundala")
 
   document(

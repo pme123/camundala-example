@@ -124,6 +124,7 @@
 
     function openFromUrl(url, viewer) {
         console.log('attempting to open <' + url + '>');
+        // adjust relative path to your BPMNs
         $.ajax("src/main/resources/" + url, {dataType: 'text'}).done(async function (xml) {
 
             try {

@@ -1,11 +1,22 @@
 package camundala.examples.invoice
 package simulation
 
-import camundala.examples.invoice.bpmn.*
-import camundala.examples.invoice.domain.*
+import camundala.bpmn.CollectEntries
+import camundala.examples.invoice.InvoiceReceipt.{
+  ApproveInvoiceUT,
+  ApproverGroup,
+  InvoiceAssignApproverDMN,
+  InvoiceCategory,
+  PrepareBankTransferUT
+}
+import camundala.examples.invoice.ReviewInvoice.{
+  AssignReviewerUT,
+  ReviewInvoiceUT
+}
+import camundala.simulation.*
 import camundala.simulation.custom.CustomSimulation
 
-// It/testOnly *InvoiceSimulation
+// exampleInvoiceC7/It/testOnly *InvoiceSimulation
 class InvoiceSimulation extends CustomSimulation:
 
   simulate(
@@ -17,10 +28,12 @@ class InvoiceSimulation extends CustomSimulation:
       `Invoice Receipt that fails`,
       "Could not archive invoice..."
     )(
-      ApproveInvoiceUT,
+      ApproveInvoiceUT
+        .waitForSec(1), // tests wait function for UserTasks
       PrepareBankTransferUT
     ),
     scenario(`Invoice Receipt`)(
+      waitFor(1),
       ApproveInvoiceUT,
       PrepareBankTransferUT
     ),
@@ -49,30 +62,52 @@ class InvoiceSimulation extends CustomSimulation:
     badScenario(
       BadValidationP,
       500,
-      "Validation Error: Input is not valid: DecodingFailure(Missing required field, List(DownField(creditor)))"
-    )
+      "Validation Error: Input is not valid: DecodingFailure at .creditor: Missing required field"
+    ),
+    // mocking
+    scenario(`Invoice Receipt mocked`) (
+      NotApproveInvoiceUT,
+      // subProcess not needed because of mocking
+      ApproveInvoiceUT, // now approve
+      PrepareBankTransferUT),
+    scenario(`Review Invoice mocked`),
+
   )
 
   override implicit def config =
     super.config
       .withPort(8034)
-  //.withUserAtOnce(100) // do load testing
+
+  private lazy val `Invoice Receipt` = InvoiceReceipt.example
+  private lazy val `Invoice Receipt mocked` = `Invoice Receipt with Review`
+    .withIn(InvoiceReceipt.In(invoiceReviewedMock = Some(ReviewInvoice.Out())))
+
+  private lazy val ApproveInvoiceUT = InvoiceReceipt.ApproveInvoiceUT.example
+  private lazy val PrepareBankTransferUT =
+    InvoiceReceipt.PrepareBankTransferUT.example
+
+  private lazy val `Review Invoice` = ReviewInvoice.example
+  private lazy val `Review Invoice mocked` = ReviewInvoice.example
+    .withIn(ReviewInvoice.In(outputMock = Some(ReviewInvoice.Out())))
+  private lazy val AssignReviewerUT = ReviewInvoice.AssignReviewerUT.example
+  private lazy val ReviewInvoiceUT = ReviewInvoice.ReviewInvoiceUT.example
 
   private lazy val ReviewInvoiceNotClarifiedUT =
     ReviewInvoiceUT
-      .withOut(InvoiceReviewed(false))
+      .withOut(ReviewInvoice.ReviewInvoiceUT.Out(false))
 
   private lazy val NotApproveInvoiceUT =
     ApproveInvoiceUT
-      .withOut(ApproveInvoice(false))
+      .withOut(InvoiceReceipt.ApproveInvoiceUT.Out(false))
   // this indirection is needed as we use the same Process for two scenarios (name clash).
-  private lazy val `Invoice Receipt with Override` = `Invoice Receipt`
+  private lazy val `Invoice Receipt with Override` = InvoiceReceipt.example
 
   private lazy val WithOverrideScenario =
     `Invoice Receipt with Override`
       .exists("approved")
       .notExists("clarified")
       .isEquals("approved", true)
+      .isEquals("invoiceCategory", InvoiceCategory.`Travel Expenses`)
 
   private lazy val `ApproveInvoiceUT with Override` =
     ApproveInvoiceUT
@@ -80,5 +115,35 @@ class InvoiceSimulation extends CustomSimulation:
       .notExists("amounts")
       .isEquals("amount", 300.0)
   private lazy val `Invoice Receipt that fails` =
-    `Invoice Receipt`
-      .withIn(InvoiceReceipt(shouldFail = Some(true)))
+    InvoiceReceipt.example
+      .withIn(InvoiceReceipt.In(shouldFail = Some(true)))
+
+  private lazy val InvoiceAssignApproverDMN =
+    InvoiceReceipt.InvoiceAssignApproverDMN.example
+  private lazy val InvoiceAssignApproverDMN2 =
+    InvoiceAssignApproverDMN
+      .withIn(
+        InvoiceReceipt.InvoiceAssignApproverDMN
+          .In(1050, InvoiceCategory.`Travel Expenses`)
+      )
+      .withOut(
+        CollectEntries(Seq(ApproverGroup.accounting, ApproverGroup.sales))
+      )
+
+  private lazy val `Review Invoice not clarified` =
+    ReviewInvoice.example
+      .withOut(ReviewInvoice.Out(false))
+
+  private lazy val `Invoice Receipt with Review` =
+    InvoiceReceipt.example
+      .withOut(InvoiceReceipt.Out(clarified = Some(true)))
+
+  private lazy val `Invoice Receipt with Review failed` =
+    InvoiceReceipt.example
+      .withOut(
+        InvoiceReceipt.Out(approved = false, clarified = Some(false))
+      )
+  private lazy val BadValidationP =
+    InvoiceReceipt.example
+      .withIn(InvoiceReceipt.In(null))
+end InvoiceSimulation

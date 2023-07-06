@@ -20,12 +20,13 @@ lazy val root = (project in file("."))
     testFrameworks += new TestFramework("camundala.simulation.custom.SimulationTestFramework")
   )
 
-val camundalaVersion = "1.15.13"
+val camundalaVersion = "1.16.0-SNAPSHOT"
 lazy val camundalaDependencies = Seq(
   "io.github.pme123" %% "camundala-api" % camundalaVersion,
-  "io.github.pme123" %% "camundala-simulation" % camundalaVersion % IntegrationTest
+  "io.github.pme123" %% "camundala-camunda" % camundalaVersion,
+  "io.github.pme123" %% "camundala-simulation" % camundalaVersion % IntegrationTest,
 )
-val camundaVersion = "7.18.0"
+val camundaVersion = "7.19.0"
 val springBootVersion = "2.7.6"
 val h2Version = "2.1.214"
 // depending on your project you need:
