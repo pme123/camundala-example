@@ -16,7 +16,7 @@ import camundala.examples.invoice.ReviewInvoice.{
 import camundala.simulation.*
 import camundala.simulation.custom.CustomSimulation
 
-// exampleInvoiceC7/It/testOnly *InvoiceSimulation
+// It/testOnly *InvoiceSimulation
 class InvoiceSimulation extends CustomSimulation:
 
   simulate(
